@@ -12,7 +12,7 @@ export default async (req, res) => {
       const { email, password } = req.body;
       const client = new MongoClient(MONGODB_URI);
       await client.connect();
-      const db = client.db("chatbotDB");
+      const db = client.db("EnlightenGPT");
       await db.command({ ping: 1 });  
       const user = await db.collection('users').findOne({ email });
       

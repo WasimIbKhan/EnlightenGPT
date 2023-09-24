@@ -1,35 +1,28 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-realsense-dev-181804-authRole",
-      "UnauthRoleArn": "arn:aws:iam::448932819576:role/amplify-realsense-dev-181804-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::448932819576:role/amplify-realsense-dev-181804-authRole",
-      "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-realsense-dev-181804-deployment",
-      "UnauthRoleName": "amplify-realsense-dev-181804-unauthRole",
-      "StackName": "amplify-realsense-dev-181804",
-      "StackId": "arn:aws:cloudformation:us-west-2:448932819576:stack/amplify-realsense-dev-181804/560e7980-5647-11ee-868b-06da754062a3",
-      "AmplifyAppId": "d371nd2kwm4abx"
-    }
-  },
-  "newdev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-realsense-newdev-200910-authRole",
-      "UnauthRoleArn": "arn:aws:iam::448932819576:role/amplify-realsense-newdev-200910-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::448932819576:role/amplify-realsense-newdev-200910-authRole",
+      "AuthRoleName": "amplify-enlightengpt-dev-183214-authRole",
+      "UnauthRoleArn": "arn:aws:iam::448932819576:role/amplify-enlightengpt-dev-183214-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::448932819576:role/amplify-enlightengpt-dev-183214-authRole",
       "Region": "eu-west-2",
-      "DeploymentBucketName": "amplify-realsense-newdev-200910-deployment",
-      "UnauthRoleName": "amplify-realsense-newdev-200910-unauthRole",
-      "StackName": "amplify-realsense-newdev-200910",
-      "StackId": "arn:aws:cloudformation:eu-west-2:448932819576:stack/amplify-realsense-newdev-200910/d955a930-5656-11ee-a11b-06b5f831b7a4",
-      "AmplifyAppId": "d1bh9y0ttvz0bk"
+      "DeploymentBucketName": "amplify-enlightengpt-dev-183214-deployment",
+      "UnauthRoleName": "amplify-enlightengpt-dev-183214-unauthRole",
+      "StackName": "amplify-enlightengpt-dev-183214",
+      "StackId": "arn:aws:cloudformation:eu-west-2:448932819576:stack/amplify-enlightengpt-dev-183214/23225de0-5a37-11ee-9a3d-0214512468d2",
+      "AmplifyAppId": "dx93wtezq7s2s"
     },
     "categories": {
       "auth": {
-        "realsensea2656bb8": {}
+        "enlightengpt32db5af2": {}
+      },
+      "function": {
+        "S3Triggerea54043a": {
+          "deploymentBucketName": "amplify-enlightengpt-dev-183214-deployment",
+          "s3Key": "amplify-builds/S3Triggerea54043a-42504d5044662b633571-build.zip"
+        }
       },
       "storage": {
-        "s3a1f9e710": {}
+        "enlightengpt": {}
       }
     }
   }

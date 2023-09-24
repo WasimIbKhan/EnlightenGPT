@@ -11,7 +11,7 @@ export default async (req, res) => {
       const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
       await client.connect();
       
-      const db = client.db("chatbotDB");
+      const db = client.db("EnlightenGPT");
       
       // Append new history to the existing history array
       const result = await db.collection('users').updateOne(

@@ -9,7 +9,7 @@ export default async (req, res) => {
       const userId = req.query.userId; // Assuming you pass userId as a query parameter
       const client = new MongoClient(MONGODB_URI);
       await client.connect();
-      const db = client.db("chatbotDB");
+      const db = client.db("EnlightenGPT");
       
       // Fetch the user document by userId
       const user = await db.collection('users').findOne({ _id: new ObjectId(userId) });

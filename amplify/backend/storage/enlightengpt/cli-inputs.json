@@ -1,0 +1,18 @@
+{
+  "resourceName": "enlightengpt",
+  "policyUUID": "d39e4a9f",
+  "bucketName": "enlightengpt",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "S3Triggerea54043a",
+  "groupAccess": {}
+}

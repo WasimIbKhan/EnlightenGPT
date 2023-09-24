@@ -11,7 +11,7 @@ export default async (req, res) => {
       const createdAt = new Date();
       const client = new MongoClient(MONGODB_URI);
       await client.connect();
-      const db = client.db("chatbotDB");
+      const db = client.db("EnlightenGPT");
       await db.collection('users').updateOne(
         { _id: new ObjectId(userId) },
         {
