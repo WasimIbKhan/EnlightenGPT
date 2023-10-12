@@ -3,18 +3,18 @@ import { useRouter } from 'next/router';
 import Login from './LoginPage'; // Your Login component
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/RootState';
-
+import {checkAuthState} from '@/store/actions/auth'
+import { AppDispatch } from '@/pages/_app';
+import { useDispatch } from 'react-redux';
 export default function Home() {
     const router = useRouter();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const dispatch = useDispatch<AppDispatch>();
     const authenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
     useEffect(() => {
-        if (authenticated) {
-            setIsAuthenticated(true);
-        }
-    }, [authenticated]); // Added dependency to re-run effect when authenticated changes
+        dispatch(checkAuthState());
+      }, [dispatch]);
 
-    if (isAuthenticated) {
+    if (authenticated) {
         router.push('/ChatPage'); // Redirect to ChatPage if authenticated
         return null;
     }

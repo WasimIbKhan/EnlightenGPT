@@ -31,8 +31,11 @@ export default function Layout({ children }: LayoutProps) {
       <header className="container sticky top-0 z-40 bg-white">
         <div className="h-16 border-b border-b-slate-200 py-4">
           <nav className="ml-4 pl-6">
-            <a href="#" className="hover:text-slate-600 cursor-pointer">
+            <a href="#" className="hover:text-slate-600 cursor-pointer" onClick={() => router.push('/ChatPage')}>
               Home
+            </a>
+            <a href="#" className="ml-4" onClick={() => router.push('/SummerisePage')}>
+              Summerise
             </a>
             <button onClick={handleLogout} className="ml-4">
               Logout

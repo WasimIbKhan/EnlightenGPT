@@ -81,6 +81,33 @@ export const getChats = () => async (dispatch, getState) => {
     return fileLocations;
   };
   
+  export const uploadTempFilesToAmplifyStorage = async (files) => {
+    const fileLocations = [];
+  
+    if (!files || files.length === 0) {
+      console.log('No files to upload.');
+      return fileLocations;
+    }
+  
+    try {
+      for (let file of files) {
+        const result = await Storage.put(file.name, file, {
+          contentType: file.type,
+          //deletes files automatically after 5 minutes, delete lamba function and cloudwatch if remove
+          //tagging: "Temporary=True",
+        });
+        console.log(`Uploaded file: ${result.key}`);
+  
+        
+        fileLocations.push(result.key);
+      }
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  
+    return fileLocations;
+  };
+
   export const switchChat = (index) => async (dispatch) => {
     dispatch({type: SWITCH_CHAT,
       index: index})

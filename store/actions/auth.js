@@ -66,3 +66,13 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('userData');
   dispatch({ type: LOGOUT });
 };
+
+export const checkAuthState = () => (dispatch) => {
+  const userData = localStorage.getItem('userData');
+  if (userData) {
+    const { auth, userId, token } = JSON.parse(userData);
+    if (auth && userId && token) {
+      dispatch({ type: LOGIN, auth, userId, token });
+    }
+  }
+};
