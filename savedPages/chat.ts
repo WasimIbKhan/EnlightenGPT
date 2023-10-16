@@ -27,11 +27,10 @@ export default async function handler(
   try {
     // OpenAI recommends replacing newlines with spaces for best results
     const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
-    /*
+   
     
       const index = pinecone.Index(PINECONE_INDEX_NAME);
 
-      create vectorstore
       const vectorStore = await PineconeStore.fromExistingIndex(
         new OpenAIEmbeddings({}),
         {
@@ -40,9 +39,9 @@ export default async function handler(
           namespace: chatTitle, //namespace comes from your config folder
         },
       );
-    */
+
     //create chain
-    const chain = makeChain();
+    const chain = makeChain(vectorStore);
 
     const pastMessages = history.map((message: string, i: number) => {
       if (i % 2 === 0) {

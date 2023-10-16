@@ -66,7 +66,7 @@ Use the following format:
 Step 1:{answer} <step 1 reasoning>
 Response to user:{answer}<response to student>
 `
-export const makeChain = () => {
+export const makeChain = (vectorStore: PineconeStore) => {
   const chat = new ChatOpenAI({
     temperature: 0, // increase temepreature to get more creative answers
     modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
