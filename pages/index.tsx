@@ -15,7 +15,7 @@ export default function Home() {
       }, [dispatch]);
 
     if (authenticated) {
-        router.push('/ChatPage'); // Redirect to ChatPage if authenticated
+        router.push('/TutorBot'); // Redirect to ChatPage if authenticated
         return null;
     }
 
