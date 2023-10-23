@@ -10,7 +10,6 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const { question, history } = req.body;
-
   /*
   const rawDocs = [];
 
@@ -39,15 +38,17 @@ export default async function handler(
   try {
 
     //create chain
+    const pastMessages = history.flatMap((messages: string[]) => 
+      messages.map((message: string, i: number) => {
+        if (i % 2 === 0) {
+          return new HumanMessage(message);
+        } else {
+          return new AIMessage(message);
+        }
+      })
+    );
 
-    const pastMessages = history.map((message: string, i: number) => {
-      if (i % 2 === 0) {
-        return new HumanMessage(message);
-      } else {
-        return new AIMessage(message);
-      }
-    });
-
+    
     const textSplitter = new RecursiveCharacterTextSplitter({
         chunkSize: 1000,
         chunkOverlap: 200,
@@ -55,10 +56,10 @@ export default async function handler(
 
     //const docs = await textSplitter.splitDocuments(rawDocs);
     //console.log(docs)
-    const response = await chatChain(question)
+    const response = await chatChain(question, pastMessages)
 
-    console.log('response', response.content);
-    res.status(200).json(response.content);
+    console.log('response', response);
+    res.status(200).json(response.response);
 
   } catch (error: any) {
     console.log('error', error);
