@@ -57,7 +57,6 @@ export const chatChain = async(question: string, pastMessages:any) => {
     llm: llm,
     verbose: true,
   });
-  console.log(memory)
   const response = await chain.call({
     input: question
   });

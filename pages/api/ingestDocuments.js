@@ -4,7 +4,7 @@ import { run } from '../../scripts/ingest-data.ts';
 export default async (req, res) => {
     if (req.method === 'POST') {
         const { docLocations, namespace } = req.body;
-
+        console.log("Ingesting documents:", docLocations, namespace)
         try {
             await run(docLocations, namespace);
             res.status(200).json({ message: 'Documents ingested successfully!' });

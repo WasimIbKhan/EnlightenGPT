@@ -49,6 +49,7 @@ export default function Home() {
     textAreaRef.current?.focus();
   }, []);
 
+  
   //handle form submission
   async function handleSubmit(e: any) {
     e.preventDefault();

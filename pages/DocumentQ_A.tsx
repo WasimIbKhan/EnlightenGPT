@@ -209,42 +209,57 @@ export default function Home() {
   };
 
   const handleFileSubmit = async () => {
-    if (files && files.length > 0) {
-      dispatch(addChat(chatTitle, files));
-      setFiles([]); // Reset the files state to an empty array after submission
+    if ((chatTitle.length > 0) && files && files.length > 0) {
+      setPageLoading(true)
+      await dispatch(addChat(chatTitle, files));
+      setPageLoading(false)
+    }
+    else {
+      alert('Please make sure a Chat Title and files are set');
+      return;
     }
   };
 
   const handleIngest = async () => {
-    if (!chatTitle.trim()) {
-      alert('Please enter a Chat Title before uploading.');
+    console.log('docs')
+    const chat = chats[index];
+    if (chat.chatTitle == 0 || chat.docs.length == 0) {
+      alert('No files to ingest');
       return;
-    }
-    if (chats[0].docs && chats[0].docs.length > 0) {
-      try {
-        const response = await fetch('/api/ingestDocuments', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            docLocations: chats[0].docs,
-            namespace: chats[0].chatTitle,
-          }),
-        });
+    } else {
+      
+      console.log(chat)
+        try {
+          const response = await fetch('/api/ingestDocuments', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              docLocations: chat.docs,
+              namespace: chat.chatTitle,
+            }),
+          });
 
-        const data = await response.json();
-        if (data.error) {
-          console.error(data.error);
-        } else {
-          console.log(data.message);
+          const data = await response.json();
+          if (data.error) {
+            console.error(data.error);
+          } else {
+            console.log(data.message);
+          }
+        } catch (error) {
+          console.error('Error during ingestion:', error);
         }
-      } catch (error) {
-        console.error('Error during ingestion:', error);
-      }
+      
     }
+    
+    
   };
 
+  if(pageLoading) {
+    return(
+    <div><h1>Its loading, will make a loading button soon</h1></div>)
+  }
   return (
     <>
       <Layout>
@@ -256,6 +271,14 @@ export default function Home() {
             <div className={styles.sidebar}>
               {chats && (
                 <ul className={styles.chatList}>
+                  <button
+                    className={styles.newChatButton}
+                    onClick={() => {
+                      handleSwitchChat(0);
+                    }}
+                  >
+                    New Chat
+                  </button>
                   {chats &&
                     chats.map((chat, index) => (
                       <li
@@ -263,195 +286,145 @@ export default function Home() {
                         className={styles.chatItem}
                         onClick={() => handleSwitchChat(index)}
                       >
-                        {index === 0 ? (
-                          <button
-                            className={styles.newChatButton}
-                            onClick={() => {
-                              handleSwitchChat(0);
-                            }}
-                          >
-                            New Chat
-                          </button>
-                        ) : (
-                          chat.chatTitle
-                        )}
+                        {chat.chatTitle}
                       </li>
                     ))}
                 </ul>
               )}
             </div>
-            <main className={styles.header}>
-              <div className={styles.cloud}>
-                <div ref={messageListRef} className={styles.messagelist}>
-                  {messageState.history.map((messagePair, index) => (
-                    <>
-                      <div
-                        key={`history-question-${index}`}
-                        className={styles.usermessage}
-                      >
-                        <Image
-                          src="/usericon.png"
-                          alt="Me"
-                          width="30"
-                          height="30"
-                          className={styles.usericon}
-                          priority
-                        />
-                        <div className={styles.markdownanswer}>
-                          <ReactMarkdown linkTarget="_blank">
-                            {messagePair[0]} 
-                          </ReactMarkdown>
-                        </div>
-                      </div>
-                      <div
-                        key={`history-answer-${index}`}
-                        className={styles.apimessage}
-                      >
-                        <Image
-                          src="/bot-image.png"
-                          alt="AI"
-                          width="40"
-                          height="40"
-                          className={styles.boticon}
-                          priority
-                        />
-                        <div className={styles.markdownanswer}>
-                          <ReactMarkdown linkTarget="_blank">
-                            {messagePair[1]} 
-                          </ReactMarkdown>
-                        </div>
-                      </div>
-                    </>
-                  ))}
-                  {messages.map((message, index) => {
-                    let icon;
-                    let className;
-                    if (message.type === 'apiMessage') {
-                      icon = (
-                        <Image
-                          key={index}
-                          src="/bot-image.png"
-                          alt="AI"
-                          width="40"
-                          height="40"
-                          className={styles.boticon}
-                          priority
-                        />
-                      );
-                      className = styles.apimessage;
-                    } else {
-                      icon = (
-                        <Image
-                          key={index}
-                          src="/usericon.png"
-                          alt="Me"
-                          width="30"
-                          height="30"
-                          className={styles.usericon}
-                          priority
-                        />
-                      );
-                      // The latest message sent by the user will be animated while waiting for a response
-                      className =
-                        loading && index === messages.length - 1
-                          ? styles.usermessagewaiting
-                          : styles.usermessage;
-                    }
-                    return (
-                      <>
-                        <div key={`chatMessage-${index}`} className={className}>
-                          {icon}
-                          <div className={styles.markdownanswer}>
-                            <ReactMarkdown linkTarget="_blank">
-                              {message.message}
-                            </ReactMarkdown>
-                          </div>
-                        </div>
-                        {message.sourceDocs && (
-                          <div
-                            className="p-5"
-                            key={`sourceDocsAccordion-${index}`}
-                          >
-                            <Accordion
-                              type="single"
-                              collapsible
-                              className="flex-col"
-                            >
-                              {message.sourceDocs.map((doc, index) => (
-                                <div key={`messageSourceDocs-${index}`}>
-                                  <AccordionItem value={`item-${index}`}>
-                                    <AccordionTrigger>
-                                      <h3>Source {index + 1}</h3>
-                                    </AccordionTrigger>
-                                    <AccordionContent>
-                                      <ReactMarkdown linkTarget="_blank">
-                                        {doc.pageContent}
-                                      </ReactMarkdown>
-                                      <p className="mt-2">
-                                        <b>Source:</b> {doc.metadata.source}
-                                      </p>
-                                    </AccordionContent>
-                                  </AccordionItem>
-                                </div>
-                              ))}
-                            </Accordion>
-                          </div>
-                        )}
-                      </>
+            
+            <main className={styles.main}>
+            <div className={styles.cloud}>
+            {chatTitle.length!==0 && (<div ref={messageListRef} className={styles.messagelist}>
+                {messages.map((message, index) => {
+                  let icon;
+                  let className;
+                  if (message.type === 'apiMessage') {
+                    icon = (
+                      <Image
+                        key={index}
+                        src="/bot-image.png"
+                        alt="AI"
+                        width="40"
+                        height="40"
+                        className={styles.boticon}
+                        priority
+                      />
                     );
-                  })}
-                </div>
-              </div>
-              <div className={styles.center}>
-                <div className={styles.cloudform}>
-                  <form onSubmit={handleSubmit}>
-                    <textarea
-                      disabled={loading}
-                      onKeyDown={handleEnter}
-                      ref={textAreaRef}
-                      autoFocus={false}
-                      rows={1}
-                      maxLength={512}
-                      id="userInput"
-                      name="userInput"
-                      placeholder={
-                        loading
-                          ? 'Waiting for response...'
-                          : 'What is this legal case about?'
-                      }
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      className={styles.textarea}
-                    />
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className={styles.generatebutton}
-                    >
-                      {loading ? (
-                        <div className={styles.loadingwheel}>
-                          <LoadingDots color="#000" />
+                    className = styles.apimessage;
+                  } else {
+                    icon = (
+                      <Image
+                        key={index}
+                        src="/usericon.png"
+                        alt="Me"
+                        width="30"
+                        height="30"
+                        className={styles.usericon}
+                        priority
+                      />
+                    );
+                    // The latest message sent by the user will be animated while waiting for a response
+                    className =
+                      loading && index === messages.length - 1
+                        ? styles.usermessagewaiting
+                        : styles.usermessage;
+                  }
+                  return (
+                    <>
+                      <div key={`chatMessage-${index}`} className={className}>
+                        {icon}
+                        <div className={styles.markdownanswer}>
+                          <ReactMarkdown linkTarget="_blank">
+                            {message.message}
+                          </ReactMarkdown>
                         </div>
-                      ) : (
-                        // Send icon SVG in input field
-                        <svg
-                          viewBox="0 0 20 20"
-                          className={styles.svgicon}
-                          xmlns="http://www.w3.org/2000/svg"
+                      </div>
+                      {message.sourceDocs && (
+                        <div
+                          className="p-5"
+                          key={`sourceDocsAccordion-${index}`}
                         >
-                          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                        </svg>
+                          <Accordion
+                            type="single"
+                            collapsible
+                            className="flex-col"
+                          >
+                            {message.sourceDocs.map((doc, index) => (
+                              <div key={`messageSourceDocs-${index}`}>
+                                <AccordionItem value={`item-${index}`}>
+                                  <AccordionTrigger>
+                                    <h3>Source {index + 1}</h3>
+                                  </AccordionTrigger>
+                                  <AccordionContent>
+                                    <ReactMarkdown linkTarget="_blank">
+                                      {doc.pageContent}
+                                    </ReactMarkdown>
+                                    <p className="mt-2">
+                                      <b>Source:</b> {doc.metadata.source}
+                                    </p>
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </div>
+                            ))}
+                          </Accordion>
+                        </div>
                       )}
-                    </button>
-                  </form>
-                </div>
+                    </>
+                  );
+                })}
+              </div>)}
+            </div>
+            <div className={styles.center}>
+              <div className={styles.cloudform}>
+                <form onSubmit={handleSubmit}>
+                  <textarea
+                    disabled={loading}
+                    onKeyDown={handleEnter}
+                    ref={textAreaRef}
+                    autoFocus={false}
+                    rows={1}
+                    maxLength={512}
+                    id="userInput"
+                    name="userInput"
+                    placeholder={
+                      loading
+                        ? 'Waiting for response...'
+                        : 'What is this legal case about?'
+                    }
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className={styles.textarea}
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={styles.generatebutton}
+                  >
+                    {loading ? (
+                      <div className={styles.loadingwheel}>
+                        <LoadingDots color="#000" />
+                      </div>
+                    ) : (
+                      // Send icon SVG in input field
+                      <svg
+                        viewBox="0 0 20 20"
+                        className={styles.svgicon}
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                      </svg>
+                    )}
+                  </button>
+                </form>
               </div>
-              {error && (
-                <div className="border border-red-400 rounded-md p-4">
-                  <p className="text-red-500">{error}</p>
-                </div>
-              )}
-            </main>
+            </div>
+            {error && (
+              <div className="border border-red-400 rounded-md p-4">
+                <p className="text-red-500">{error}</p>
+              </div>
+            )}
+          </main>
             <div className={styles.box}>
               <input
                 placeholder="Chat Title"

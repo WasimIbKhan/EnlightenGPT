@@ -49,7 +49,7 @@ export default async function handler(
 
     try {
         //create chain
-        const chain = loadSummarizationChain(model, { type: "stuff" });
+        const chain = loadSummarizationChain(model, { type: "refine" });
         const response = await chain.call({
             input_documents: docs,
         });
