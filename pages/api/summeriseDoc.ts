@@ -49,7 +49,7 @@ export default async function handler(
 
     try {
         //create chain
-        const chain = loadSummarizationChain(model, { type: "refine" });
+        const chain = loadSummarizationChain(model, { type: "map_reduce" });
         const response = await chain.call({
             input_documents: docs,
         });
