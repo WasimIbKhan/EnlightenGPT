@@ -3,8 +3,9 @@ import styles from '@/styles/Feedback.module.css';
 
 const FeedbackComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rating, setRating] = useState<number| null>(null)
-  const [comment, setComment] = useState<string>('')
+  const [rating, setRating] = useState<number | null>(null);
+  const [comment, setComment] = useState<string>('');
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -14,11 +15,10 @@ const FeedbackComponent = () => {
   };
 
   const handleSubmitFeedback = async () => {
-    if (!rating) {
+    if (rating === null) {
       alert('Please select a rating before submitting.');
       return;
     }
-    console.log(rating,comment)
     try {
       const response = await fetch('/api/post-feedback', {
         method: 'POST',
@@ -27,13 +27,12 @@ const FeedbackComponent = () => {
         },
         body: JSON.stringify({ rating, comment }),
       });
-  
+
       if (response.ok) {
         setIsModalOpen(false); // Close the modal after submission
       } else {
         console.error('Failed to record feedback');
       }
-      setIsModalOpen(false); 
     } catch (error) {
       console.error('Error submitting feedback:', error);
     }
@@ -111,9 +110,10 @@ const FeedbackComponent = () => {
             <div className={styles.npsTextareaWrap}>
               <textarea
                 placeholder="Your comment..."
-                rows="8"
+                rows={8}
                 className={styles.npsTextarea}
                 onChange={(e) => setComment(e.target.value)}
+                value={comment} // Added value prop to the textarea
               ></textarea>
             </div>
             <div className={styles.npsBtnWrap}>
