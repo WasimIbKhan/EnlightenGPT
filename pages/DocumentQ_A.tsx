@@ -17,6 +17,7 @@ import DropFileInput from '../components/drop-file-input/DropFileInput';
 import { AppDispatch } from '@/pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/RootState';
+import FeedbackComponent from '@/components/Feedback';
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -424,6 +425,7 @@ export default function Home() {
                 <p className="text-red-500">{error}</p>
               </div>
             )}
+            <FeedbackComponent />
           </main>
             <div className={styles.box}>
               <input

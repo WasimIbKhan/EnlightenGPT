@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
 
     const client = new MongoClient(MONGO_URI);
     await client.connect();
-    const db = client.db('YOUR_DB_NAME');
+    const db = client.db('EnlightenGPT');
     const result = await db.collection('users').insertOne({ username, password: hashedPassword });
 
     if (result.insertedCount > 0) {
