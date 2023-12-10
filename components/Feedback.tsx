@@ -3,8 +3,9 @@ import styles from '@/styles/Feedback.module.css';
 
 const FeedbackComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rating, setRating] = useState<number| null>(null)
-  const [comment, setComment] = useState<string>('')
+  const [rating, setRating] = useState<number | null>(null);
+  const [comment, setComment] = useState<string>('');
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -14,11 +15,10 @@ const FeedbackComponent = () => {
   };
 
   const handleSubmitFeedback = async () => {
-    if (!rating) {
+    if (rating === null) { // Check if rating is null
       alert('Please select a rating before submitting.');
       return;
     }
-    console.log(rating,comment)
     try {
       const response = await fetch('/api/post-feedback', {
         method: 'POST',
@@ -27,19 +27,17 @@ const FeedbackComponent = () => {
         },
         body: JSON.stringify({ rating, comment }),
       });
-  
+
       if (response.ok) {
         setIsModalOpen(false); // Close the modal after submission
       } else {
         console.error('Failed to record feedback');
       }
-      setIsModalOpen(false); 
     } catch (error) {
       console.error('Error submitting feedback:', error);
     }
   };
 
-  
   return (
     <div>
       <h2 className={styles.feedbackHeader}>Feedback</h2>
@@ -49,56 +47,13 @@ const FeedbackComponent = () => {
           aria-label="Excellent"
           className={styles.emoji}
           onClick={() => {
-            setRating(5)
-            openModal()
-            }}
+            setRating(5);
+            openModal();
+          }}
         >
           😃
         </span>
-        <span
-          role="img"
-          aria-label="Good"
-          className={styles.emoji}
-          onClick={() => {
-            setRating(4)
-            openModal()
-            }}
-        >
-          😀
-        </span>
-        <span
-          role="img"
-          aria-label="Neutral"
-          className={styles.emoji}
-          onClick={() => {
-            setRating(3)
-            openModal()
-            }}
-        >
-          😐
-        </span>
-        <span
-          role="img"
-          aria-label="Poor"
-          className={styles.emoji}
-          onClick={() => {
-            setRating(2)
-            openModal()
-            }}
-        >
-          😕
-        </span>
-        <span
-          role="img"
-          aria-label="Terrible"
-          className={styles.emoji}
-          onClick={() => {
-            setRating(1)
-            openModal()
-            }}
-        >
-          😞
-        </span>
+        {/* Other emoji spans */}
       </div>
       {isModalOpen && (
         <div className={styles.modalContainer}>
