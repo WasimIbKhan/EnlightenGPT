@@ -1,0 +1,114 @@
+{
+  "stackName": "amplify-enlightengpt-dev-183214",
+  "props": {
+    "templateFile": "root-stack-template.json",
+    "parameters": {
+      "AuthRoleName": "amplify-enlightengpt-dev-183214-authRole",
+      "UnauthRoleName": "amplify-enlightengpt-dev-183214-unauthRole",
+      "DeploymentBucketName": "amplify-enlightengpt-dev-183214-deployment"
+    },
+    "preserveLogicalIds": true,
+    "loadNestedStacks": {
+      "authenlightengpt32db5af2": {
+        "templateFile": "auth\\enlightengpt32db5af2\\enlightengpt32db5af2-cloudformation-template.json",
+        "parameters": {
+          "identityPoolName": "enlightengpt32db5af2_identitypool_32db5af2",
+          "allowUnauthenticatedIdentities": true,
+          "resourceNameTruncated": "enligh32db5af2",
+          "userPoolName": "enlightengpt32db5af2_userpool_32db5af2",
+          "autoVerifiedAttributes": [
+            "email"
+          ],
+          "mfaConfiguration": "OFF",
+          "mfaTypes": [
+            "SMS Text Message"
+          ],
+          "smsAuthenticationMessage": "Your authentication code is {####}",
+          "smsVerificationMessage": "Your verification code is {####}",
+          "emailVerificationSubject": "Your verification code",
+          "emailVerificationMessage": "Your verification code is {####}",
+          "defaultPasswordPolicy": false,
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [],
+          "requiredAttributes": [
+            "email"
+          ],
+          "aliasAttributes": [],
+          "userpoolClientGenerateSecret": false,
+          "userpoolClientRefreshTokenValidity": 30,
+          "userpoolClientWriteAttributes": [
+            "email"
+          ],
+          "userpoolClientReadAttributes": [
+            "email"
+          ],
+          "userpoolClientLambdaRole": "enligh32db5af2_userpoolclient_lambda_role",
+          "userpoolClientSetAttributes": false,
+          "sharedId": "32db5af2",
+          "resourceName": "enlightengpt32db5af2",
+          "authSelections": "identityPoolAndUserPool",
+          "useDefault": "default",
+          "usernameAttributes": [
+            "email"
+          ],
+          "userPoolGroupList": [],
+          "serviceName": "Cognito",
+          "usernameCaseSensitive": false,
+          "useEnabledMfas": true,
+          "breakCircularDependency": true,
+          "dependsOn": [],
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "functionS3Triggerea54043a": {
+        "templateFile": "function\\S3Triggerea54043a\\S3Triggerea54043a-cloudformation-template.json",
+        "parameters": {
+          "deploymentBucketName": "amplify-enlightengpt-dev-183214-deployment",
+          "s3Key": "amplify-builds/S3Triggerea54043a-42504d5044662b633571-build.zip",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      },
+      "storageenlightengpt": {
+        "templateFile": "storage\\enlightengpt\\cloudformation-template.json",
+        "parameters": {
+          "bucketName": "enlightengpt",
+          "selectedGuestPermissions": [
+            "s3:PutObject",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:DeleteObject"
+          ],
+          "selectedAuthenticatedPermissions": [
+            "s3:PutObject",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:DeleteObject"
+          ],
+          "triggerFunction": "S3Triggerea54043a",
+          "s3PrivatePolicy": "Private_policy_d39e4a9f",
+          "s3ProtectedPolicy": "Protected_policy_d39e4a9f",
+          "s3PublicPolicy": "Public_policy_d39e4a9f",
+          "s3ReadPolicy": "read_policy_d39e4a9f",
+          "s3UploadsPolicy": "Uploads_policy_d39e4a9f",
+          "authPolicyName": "s3_amplify_d39e4a9f",
+          "unauthPolicyName": "s3_amplify_d39e4a9f",
+          "AuthenticatedAllowList": "ALLOW",
+          "GuestAllowList": "ALLOW",
+          "s3PermissionsAuthenticatedPrivate": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedProtected": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedPublic": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedUploads": "s3:PutObject",
+          "s3PermissionsGuestPublic": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsGuestUploads": "s3:PutObject",
+          "env": "dev"
+        },
+        "preserveLogicalIds": true,
+        "loadNestedStacks": {}
+      }
+    }
+  }
+}

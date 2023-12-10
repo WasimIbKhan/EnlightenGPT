@@ -1,0 +1,17 @@
+[
+  {
+    "category": "auth",
+    "resourceName": "enlightengpt32db5af2",
+    "service": "Cognito"
+  },
+  {
+    "category": "function",
+    "resourceName": "S3Triggerea54043a",
+    "service": "Lambda"
+  },
+  {
+    "category": "storage",
+    "resourceName": "enlightengpt",
+    "service": "S3"
+  }
+]
