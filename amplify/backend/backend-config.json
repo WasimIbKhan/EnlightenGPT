@@ -34,24 +34,6 @@
       "service": "Lambda"
     }
   },
-  "parameters": {
-    "AMPLIFY_function_S3Triggerea54043a_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "S3Triggerea54043a"
-        }
-      ]
-    },
-    "AMPLIFY_function_S3Triggerea54043a_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "S3Triggerea54043a"
-        }
-      ]
-    }
-  },
   "storage": {
     "enlightengpt": {
       "dependsOn": [

@@ -25,5 +25,26 @@
         "enlightengpt": {}
       }
     }
+  },
+  "env": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-enlightengpt-env-224223-authRole",
+      "UnauthRoleArn": "arn:aws:iam::448932819576:role/amplify-enlightengpt-env-224223-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::448932819576:role/amplify-enlightengpt-env-224223-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-enlightengpt-env-224223-deployment",
+      "UnauthRoleName": "amplify-enlightengpt-env-224223-unauthRole",
+      "StackName": "amplify-enlightengpt-env-224223",
+      "StackId": "arn:aws:cloudformation:eu-west-2:448932819576:stack/amplify-enlightengpt-env-224223/6348dd00-97ad-11ee-81a3-06583088090a",
+      "AmplifyAppId": "dx93wtezq7s2s"
+    },
+    "categories": {
+      "auth": {
+        "enlightengpt32db5af2": {}
+      },
+      "function": {
+        "S3Triggerea54043a": {}
+      }
+    }
   }
 }
