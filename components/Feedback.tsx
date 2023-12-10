@@ -37,7 +37,6 @@ const FeedbackComponent = () => {
       console.error('Error submitting feedback:', error);
     }
   };
-
   
   return (
     <div>
