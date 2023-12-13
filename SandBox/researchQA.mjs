@@ -7,7 +7,7 @@ const pinecone = new PineconeClient();
 
 await pinecone.init({
   environment: "us-west4-gcp-free", //this is in the dashboard
-  apiKey: "9e24075c-0c6c-46dc-8d7a-5ee98707418a"
+  apiKey: ""
 });
 
 const index = pinecone.Index(

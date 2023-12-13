@@ -17,7 +17,7 @@ function languageModel(modelName = gpt3t, temperature = 0, verbose = false) {
     modelName: 'gpt-3.5-turbo',
     temperature: temperature,
     verbose: verbose,
-    openAIApiKey: "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", // In Node.js defaults to process.env.OPENAI_API_KEY
+    openAIApiKey: "", // In Node.js defaults to process.env.OPENAI_API_KEY
   });
 }
 
