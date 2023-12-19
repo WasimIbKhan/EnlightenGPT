@@ -18,6 +18,7 @@ import { AppDispatch } from '@/pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/RootState';
 import FeedbackComponent from '@/components/Feedback';
+import Dropdown from '../components/Dropdown/Dropdown';
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,6 +32,7 @@ export default function Home() {
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
+  const [agent, setAgent] = useState<string>(''); 
   const [error, setError] = useState<string | null>(null);
 
   const loadChats = useCallback(async () => {
@@ -167,10 +169,78 @@ export default function Home() {
     messageListRef.current?.scrollTo(0, messageListRef.current.scrollHeight);
   }
 
+  async function handleAgent2Submit(e: any) {
+    e.preventDefault();
+
+    setError(null);
+
+    if (!query) {
+      alert('Please input a question');
+      return;
+    }
+
+    const question = query.trim();
+
+    setMessageState((state) => ({
+      ...state,
+      messages: [
+        ...state.messages,
+        {
+          type: 'userMessage',
+          message: question,
+        },
+      ],
+    }));
+
+    setLoading(true);
+    setQuery('');
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/QA_Agent', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question, chatTitle }),
+    });
+
+      const data = await response.json();
+      console.log('data', data);
+
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setMessageState((state) => ({
+          ...state,
+          messages: [
+            ...state.messages,
+            {
+              type: 'apiMessage',
+              message: data.answer
+            },
+          ],
+          history: [...state.history, [question, data.answer]],
+        }));
+      }
+    } catch (error) {
+      console.error('Error during updating history:', error);
+    }
+
+    setLoading(false);
+
+    //scroll to bottom
+    messageListRef.current?.scrollTo(0, messageListRef.current.scrollHeight);
+  }
+
   //prevent empty submissions
   const handleEnter = (e: any) => {
     if (e.key === 'Enter' && query) {
-      handleSubmit(e);
+      if(agent === 'Quick search') {
+        handleSubmit(e);
+      } else if(agent === 'Research') {
+        handleAgent2Submit(e);
+      }
+      
     } else if (e.key == 'Enter') {
       e.preventDefault();
     }
@@ -209,6 +279,9 @@ export default function Home() {
     }
   };
 
+  const onAgentChange = (agent: string) => {
+    setAgent(agent);
+  }
   const handleFileSubmit = async () => {
     if ((chatTitle.length > 0) && files && files.length > 0) {
       setPageLoading(true)
@@ -428,6 +501,7 @@ export default function Home() {
             <FeedbackComponent />
           </main>
             <div className={styles.box}>
+              <Dropdown onAgentChange={onAgentChange}/>
               <input
                 placeholder="Chat Title"
                 className={styles.chatTitleInput}
