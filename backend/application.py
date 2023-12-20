@@ -5,7 +5,7 @@ import sys
 sys.path.insert(1, './research_agent-main')
 from research_agent_v2 import get_final_answer
 
-app = Flask(__name__)
+application = Flask(__name__)
 CORS(app) 
 @app.route('/QA_Agent', methods=['GET', 'POST'])
 def QA_Agent():

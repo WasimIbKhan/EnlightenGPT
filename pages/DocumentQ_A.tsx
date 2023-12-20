@@ -202,7 +202,7 @@ export default function Home() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ question, chatTitle }),
-    });
+      });
 
       const data = await response.json();
       console.log('data', data);
