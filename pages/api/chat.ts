@@ -12,8 +12,8 @@ export default async function handler(
 ) {
   const { question, history, chatTitle } = req.body;
 
-  console.log('question', question);
-  console.log('history', history);
+  //console.log('question', question);
+  //console.log('history', history);
 
   //only accept post requests
   if (req.method !== 'POST') {
@@ -57,7 +57,7 @@ export default async function handler(
       chat_history: pastMessages
     });
 
-    console.log('response', response);
+    //console.log('response', response);
     res.status(200).json(response);
   } catch (error: any) {
     console.log('error', error);

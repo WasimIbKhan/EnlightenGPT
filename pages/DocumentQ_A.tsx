@@ -194,7 +194,7 @@ export default function Home() {
 
     setLoading(true);
     setQuery('');
-
+    //http://127.0.0.1:5000/QA_Agent
     try {
       const response = await fetch('http://flask-env.eba-mheghy3z.eu-west-2.elasticbeanstalk.com/QA_Agent', {
         method: 'POST',
@@ -202,10 +202,9 @@ export default function Home() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ question, chatTitle }),
-      });
+    });
 
       const data = await response.json();
-      console.log('data', data);
 
       if (data.error) {
         setError(data.error);
