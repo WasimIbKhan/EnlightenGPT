@@ -196,7 +196,7 @@ export default function Home() {
     setQuery('');
     //http://127.0.0.1:5000/QA_Agent
     try {
-      const response = await fetch('http://flask-env.eba-mheghy3z.eu-west-2.elasticbeanstalk.com/QA_Agent', {
+      const response = await fetch('https://flask-env.eba-mheghy3z.eu-west-2.elasticbeanstalk.com/QA_Agent', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

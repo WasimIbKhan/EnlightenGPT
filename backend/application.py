@@ -6,8 +6,8 @@ sys.path.insert(1, './research_agent-main')
 from research_agent_v2 import get_final_answer
 
 application = Flask(__name__)
-CORS(app) 
-@app.route('/QA_Agent', methods=['GET', 'POST'])
+CORS(application) 
+@application.route('/QA_Agent', methods=['GET', 'POST'])
 def QA_Agent():
     data = request.json
     question = data['question']
@@ -21,4 +21,4 @@ def QA_Agent():
     return jsonify({'answer': final_answer})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    application.run(debug=True, port=443)
