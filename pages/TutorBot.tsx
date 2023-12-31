@@ -6,13 +6,6 @@ import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import LoadingDots from '@/components/ui/LoadingDots';
 import { Document } from 'langchain/document';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import DropFileInput from '../components/drop-file-input/DropFileInput';
 import { AppDispatch } from '@/pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/RootState';
@@ -253,26 +246,6 @@ export default function Home() {
               </div>
             )}
           </main>
-            <div className={styles.box}>
-              <input
-                placeholder="Chat Title"
-                className={styles.chatTitleInput}
-                value={chatTitle}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <DropFileInput
-                onFileChange={onFileChange}
-                serverFiles={serverFiles}
-              />
-              <div className={styles.flexContainer}>
-                <button
-                  className={styles.submitButton}
-                  onClick={handleFileSubmit}
-                >
-                  Upload
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </Layout>

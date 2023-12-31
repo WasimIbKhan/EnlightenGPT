@@ -8,13 +8,14 @@ import uploadImg from '../../assets/cloud-upload-regular-240.png';
 
 interface DropFileInputProps {
     onFileChange: (files: File[]) => void;
-    serverFiles:[]
+    serverFiles:[],
+    currentFiles:File[]|null
 }
 
 const DropFileInput: React.FC<DropFileInputProps> = (props) => {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
-
-    const [fileList, setFileList] = useState<File[]>([]);
+    console.log("current files:",props.currentFiles);
+    const [fileList, setFileList] = useState<File[]|null>(props.currentFiles);
 
     const onDragEnter = () => {
         if (wrapperRef.current) {
@@ -55,23 +56,9 @@ const DropFileInput: React.FC<DropFileInputProps> = (props) => {
 
     return (
         <>
-            <div
-                ref={wrapperRef}
-                className={styles.dropFileInput}
-                onDragEnter={onDragEnter}
-                onDragLeave={onDragLeave}
-                onDrop={onDrop}
-            >
-                <div className={styles.dropFileInput_label}>
-                    <Image src={uploadImg} alt="Upload" />
-                    <p>Drag & Drop your files here</p>
-                </div>
-                <input type="file" value="" onChange={onFileDrop} />
-            </div>
-            {fileList.length > 0 ? (
+            {props.currentFiles.length > 0 ? (
                 <div className={styles.dropFilePreview}>
-                    <p className={styles.dropFilePreview_title}>Ready to upload</p>
-                    {fileList.map((item, index) => (
+                    {props.currentFiles.map((item, index) => (
                         <div key={index} className={styles.dropFilePreview_item}>
                             <Image src={ImageConfig[item.type.split('/')[1]] || ImageConfig['default']} alt="File Preview" />
                             <div className={styles.dropFilePreview_item_info}>

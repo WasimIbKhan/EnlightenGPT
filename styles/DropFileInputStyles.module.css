@@ -1,6 +1,7 @@
 .dropFileInput {
     position: relative;
     width: auto;
+    margin-left: 50px;
     height: 200px;
     border: 2px dashed var(--border-color);
     border-radius: 20px;
@@ -13,7 +14,6 @@
     --box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     display: flex;
     align-items: center;
-    justify-content: center;
     background-color: var(--input-bg);
 }
 
@@ -44,6 +44,10 @@
 
 .dropFilePreview {
     margin-top: 30px;
+    display: flex; /* Use Flexbox */
+    flex-wrap: wrap; /* Wrap items to next line if they overflow */
+    align-items: center; /* Align items vertically */
+    justify-content: start; /* Align items horizontally to start */
 }
 
 .dropFilePreview p {
@@ -57,10 +61,12 @@
 .dropFilePreview_item {
     position: relative;
     display: flex;
-    margin-bottom: 10px;
+    margin-right: 10px; /* Add right margin for spacing between items */
+    margin-bottom: 10px; /* Keep for spacing between wrapped items */
     background-color: var(--input-bg);
     padding: 15px;
     border-radius: 20px;
+    align-items: center; /* Align inner items vertically */
 }
 
 .dropFilePreview_item img {

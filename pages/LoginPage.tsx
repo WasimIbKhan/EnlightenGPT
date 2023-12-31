@@ -8,20 +8,26 @@ import google from '../assets/images/google.png';
 import linkedin from '../assets/images/linkedin.png';
 import styles from '@/styles/login.module.scss';
 import { AppDispatch } from '@/pages/_app';
-
+import Loading from '@/components/ui/loading';
 function Login() {
     const dispatch = useDispatch<AppDispatch>()
     const [login, signup] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     
-    const handleLogin = (): void => {
-        dispatch(loginUser(email, password));
+    const handleLogin = async (): Promise<void> => {
+        setLoading(true);
+        await dispatch(loginUser(email, password));
+        setLoading(false);
     };
-    const handleSignup = (): void => {
+
+    const handleSignup = async (): Promise<void> => {
         if (passwordsMatch(password, confirmPassword)) {
-            dispatch(signupUser(email, password));
+            setLoading(true);
+            await dispatch(signupUser(email, password));
+            setLoading(false)
         } else {
             console.log("Passwords do not match!");
         }
@@ -32,13 +38,14 @@ function Login() {
         return password === confirmPassword;
     }
 
+    if(loading) return (<Loading />)
     return (
         <div className={styles.login}>
             <div className={`${styles['login__colored-container']} ${login ? styles['login__colored-container--left'] : styles['login__colored-container--right']}`}></div>
             <div className={`${styles['login__welcome-back']} ${login ? styles['login__welcome-back--active'] : styles['login__welcome-back--inactive']}`}>
                 <div className={styles['login__welcome-back__logo-container']}>
                     <Image className={styles['login__welcome-back__logo-container--image']} src={logo} alt="Budwriter" />
-                    RealSense
+                    EnlightenGPT
                 </div>
                 <div className={styles['login__welcome-back__main-container']}>
                     <div className={styles['login__welcome-back__main-container__text-container']}>
@@ -100,7 +107,7 @@ function Login() {
             <div className={`${styles['login__login-container']} ${!login ? styles['login__login-container--active'] : styles['login__login-container--inactive']}`}>
                 <div className={styles['login__login-container__logo-container']}>
                     <Image className={styles['login__login-container__logo-container--image']} src={logo} alt="Budwriter" />
-                    Budwriter
+                    EnlightenGPT
                 </div>
                 <div className={styles['login__login-container__main-container']}>
                     <div className={styles['login__login-container__main-container__social-container']}>

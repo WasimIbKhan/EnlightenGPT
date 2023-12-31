@@ -27,30 +27,30 @@ export default function Layout({ children }: LayoutProps) {
 
   
   return (
-    <div className="mx-auto flex flex-col space-y-4">
-      <header className="container sticky top-0 z-40 bg-white">
-        <div className="h-16 border-b border-b-slate-200 py-4">
-          <nav className="ml-4 pl-6">
-            <a href="#" className="hover:text-slate-600 cursor-pointer" onClick={() => router.push('/TutorBot')}>
-              TutorBot
-            </a>
-            <a href="#" className="ml-4" onClick={() => router.push('/DocumentQ_A')}>
-              Document Q/A
-            </a>
-            <a href="#" className="ml-4" onClick={() => router.push('/SummerisePage')}>
-              Summerise
-            </a>
-            <button onClick={handleLogout} className="ml-4">
-              Logout
-            </button>
-          </nav>
+    <div>
+        <div className="py-3">
+                <nav className="ml-4 pl-10 flex items-center space-x-8">
+                    <div className="inline-flex space-x-8 bg-white px-4 py-2 rounded shadow">
+                        <a href="#" className="text-lg font-semibold hover:text-slate-600 cursor-pointer" onClick={() => router.push('/TutorBot')}>
+                            TutorBot
+                        </a>
+                        <a href="#" className="text-lg font-semibold hover:text-slate-600 cursor-pointer" onClick={() => router.push('/DocumentQ_A')}>
+                            Document Q/A
+                        </a>
+                        <a href="#" className="text-lg font-semibold hover:text-slate-600 cursor-pointer" onClick={() => router.push('/SummerisePage')}>
+                            Summerise
+                        </a>
+                        <button onClick={handleLogout} className="text-lg font-semibold hover:text-slate-600 cursor-pointer ml-4">
+                            Logout
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        <div>
+            <main className="flex w-full flex-1 flex-col overflow-hidden">
+                {children}
+            </main>
         </div>
-      </header>
-      <div>
-        <main className="flex w-full flex-1 flex-col overflow-hidden">
-          {children}
-        </main>
-      </div>
     </div>
-  );
+);
 }
