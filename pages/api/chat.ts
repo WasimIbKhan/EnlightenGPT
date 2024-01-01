@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { question, history, chatTitle } = req.body;
+  const { question, history, chat_id } = req.body;
 
   //console.log('question', question);
   //console.log('history', history);
@@ -36,7 +36,7 @@ export default async function handler(
       {
         pineconeIndex: index,
         textKey: 'text',
-        namespace: chatTitle, //namespace comes from your config folder
+        namespace: chat_id, //namespace comes from your config folder
       },
     );
 

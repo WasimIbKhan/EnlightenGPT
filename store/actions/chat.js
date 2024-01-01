@@ -1,7 +1,8 @@
 export const GET_CHATS = 'GET_CHATS'
 export const ADD_CHAT = 'ADD_CHAT'
 export const SWITCH_CHAT = 'SWITCH_CHAT'
-
+export const CREATE_EMPTY_CHAT = 'CREATE_EMPTY_CHAT'
+import Chat from '@/models/Chat'
 import { Storage } from 'aws-amplify';
 
 export const getChats = () => async (dispatch, getState) => {
@@ -31,6 +32,7 @@ export const getChats = () => async (dispatch, getState) => {
     try {
       const userId = getState().auth.userId;
       const fileLocations = await uploadFilesToAmplifyStorage(files);
+      console.log('File locations:', fileLocations);
       const response = await fetch('/api/addChat', {
         method: 'POST',
         headers: {
@@ -39,21 +41,32 @@ export const getChats = () => async (dispatch, getState) => {
         body: JSON.stringify({ userId: userId, chatTitle: chatTitle, fileLocations: fileLocations }),
       });
       const data = await response.json();
+
       if (data.success) {
         console.log('File locations saved successfully!');
+        console.log(data)
       } else {
-        console.error('Error saving file locations:', data.message);
+        console.error('Error saving file locations:', data.chatId, fileLocations);
       }
+      const date = data.createdAt
+      const newChat = new Chat(
+        data.chatId,
+        chatTitle,
+        fileLocations,
+        date
+      )
       dispatch({
           type: ADD_CHAT,
           chat_id: data.chatId,
           chatTitle: chatTitle,
           docs: fileLocations,
-          createdAt: data.createdAt
+          createdAt: date
         })
+        return newChat;
     } catch (error) {
       console.error('Error saving file locations:', error);
     }
+    
   };
   
   const uploadFilesToAmplifyStorage = async (files) => {
@@ -113,3 +126,8 @@ export const getChats = () => async (dispatch, getState) => {
       index: index})
   }
   
+  export const createEmptyChat  = () => async (dispatch) => {
+    dispatch({
+      type: CREATE_EMPTY_CHAT,
+    })
+  }

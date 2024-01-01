@@ -14,7 +14,7 @@ interface DropFileInputProps {
 
 const DropFileInput: React.FC<DropFileInputProps> = (props) => {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
-    console.log("current files:",props.currentFiles);
+    //console.log("current files:",props.currentFiles);
     const [fileList, setFileList] = useState<File[]|null>(props.currentFiles);
 
     const onDragEnter = () => {

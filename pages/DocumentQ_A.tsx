@@ -20,6 +20,7 @@ import { RootState } from '@/store/RootState';
 import FeedbackComponent from '@/components/Feedback';
 import DropPlusButton from '../components/drop-plus-button/DropPlusButton';
 import ChatItem from '@/components/ChatItem';
+import Chat from '@/models/Chat';
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,6 +33,7 @@ export default function Home() {
   const [files, setFiles] = useState<File[] | null>([]); // Use File[] or null
   const [serverFiles, setServerFiles] = useState<[]>([]);
   const [query, setQuery] = useState<string>('');
+  const [hasSubmittedFiles, setHasSubmittedFiles] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [agent, setAgent] = useState<string>('');
@@ -86,9 +88,9 @@ export default function Home() {
       alert('Please input a question');
       return;
     }
-
+    
     const question = query.trim();
-
+    
     setMessageState((state) => ({
       ...state,
       messages: [
@@ -99,10 +101,17 @@ export default function Home() {
         },
       ],
     }));
-    console.log(serverFiles)
+    console.log("1. has user submitted files => " ,hasSubmittedFiles)
     setLoading(true);
     setQuery('');
 
+    let chat;
+    if(serverFiles && serverFiles.length==0){
+      chat = await handleFileSubmit()
+    } else {
+      chat = chats[index];
+    }
+    
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -112,7 +121,7 @@ export default function Home() {
         body: JSON.stringify({
           question,
           history,
-          chatTitle,
+          chat_id: chat? chat.chat_id: chatId,
         }),
       });
       const data = await response.json();
@@ -143,7 +152,7 @@ export default function Home() {
         body: JSON.stringify({
           newHistory: [[question, data.text]],
           userId: userId,
-          chatId: chatId,
+          chatId: chat? chat.chat_id: chatId,
         }),
       });
 
@@ -194,6 +203,13 @@ export default function Home() {
     }));
 
     setLoading(true);
+    let chat;
+    if(files && files.length>0){
+      chat = await handleFileSubmit()
+    } else {
+      chat = chats[index];
+    }
+
     setQuery('');
     //http://127.0.0.1:5000/QA_Agent
     try {
@@ -204,7 +220,7 @@ export default function Home() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ question, chatTitle }),
+          body: JSON.stringify({ question, chatTitle: chatId }),
         },
       );
 
@@ -251,6 +267,11 @@ export default function Home() {
   const handleSwitchChat = async (index: number) => {
     await dispatch(switchChat(index));
     const chat = chats[index];
+    if(chat.docs && chat.docs.length > 0){
+      setHasSubmittedFiles(true);
+    } else {
+      setHasSubmittedFiles(false);
+    }
     setTitle(chat.chatTitle);
     setServerFiles(chat.docs);
     setChatId(chat.chat_id);
@@ -284,47 +305,58 @@ export default function Home() {
   const onAgentChange = (agent: string) => {
     setAgent(agent);
   };
-  const handleFileSubmit = async () => {
-    if (chatTitle.length > 0 && files && files.length > 0) {
-      setPageLoading(true);
-      await dispatch(addChat(chatTitle, files));
-      setPageLoading(false);
-    } else {
-      alert('Please make sure a Chat Title and files are set');
-      return;
-    }
-  };
 
-  const handleIngest = async () => {
-    console.log('docs');
-    const chat = chats[index];
+  const handleFileSubmit = async () => {
+  if (query.length > 0 && files && files.length > 0) {
+    setPageLoading(true);
+    const newChatData = await dispatch(addChat(query.trim(), files));
+    if(newChatData) {
+      await handleIngest(newChatData); // Pass new chat data
+      setTitle(newChatData.chatTitle)
+      setServerFiles(newChatData.docs)
+    }
+    setPageLoading(false);
+    return newChatData
+  } else {
+    alert('Please make sure a Chat Title and files are set');
+    return;
+  }
+};
+
+  const handleIngest = async (chat: Chat) => {
+    console.log('docs')
+    console.log(chat)
     if (chat.chatTitle == 0 || chat.docs.length == 0) {
       alert('No files to ingest');
       return;
     } else {
-      console.log(chat);
-      try {
-        const response = await fetch('/api/ingestDocuments', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            docLocations: chat.docs,
-            namespace: chat.chatTitle,
-          }),
-        });
+      
+      console.log(chat)
+        try {
+          const response = await fetch('/api/ingestDocuments', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              docLocations: chat.docs,
+              namespace: chat.chat_id,
+            }),
+          });
 
-        const data = await response.json();
-        if (data.error) {
-          console.error(data.error);
-        } else {
-          console.log(data.message);
+          const data = await response.json();
+          if (data.error) {
+            console.error(data.error);
+          } else {
+            console.log(data.message);
+          }
+        } catch (error) {
+          console.error('Error during ingestion:', error);
         }
-      } catch (error) {
-        console.error('Error during ingestion:', error);
-      }
+      
     }
+    
+    
   };
 
   if (pageLoading) {
@@ -542,9 +574,7 @@ export default function Home() {
                   <p className="text-red-500">{error}</p>
                 </div>
               )}</>)}
-              
               <FeedbackComponent />
-              <div className={styles.box}>
               <div className={styles.flexContainer}>
                 <button
                   className={styles.submitButton}
@@ -556,9 +586,7 @@ export default function Home() {
                   Ingest
                 </button>
               </div>
-            </div>
             </main>
-           
           </div>
         </div>
       </Layout>

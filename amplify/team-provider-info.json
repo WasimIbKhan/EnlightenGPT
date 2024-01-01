@@ -1,4 +1,31 @@
 {
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-enlightengpt-main-230234-authRole",
+      "UnauthRoleArn": "arn:aws:iam::448932819576:role/amplify-enlightengpt-main-230234-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::448932819576:role/amplify-enlightengpt-main-230234-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-enlightengpt-main-230234-deployment",
+      "UnauthRoleName": "amplify-enlightengpt-main-230234-unauthRole",
+      "StackName": "amplify-enlightengpt-main-230234",
+      "StackId": "arn:aws:cloudformation:eu-west-2:448932819576:stack/amplify-enlightengpt-main-230234/34c889a0-97b0-11ee-8691-0a41c06b3cb2",
+      "AmplifyAppId": "dx93wtezq7s2s"
+    },
+    "categories": {
+      "auth": {
+        "enlightengpt32db5af2": {}
+      },
+      "function": {
+        "S3Triggerea54043a": {
+          "deploymentBucketName": "amplify-enlightengpt-main-230234-deployment",
+          "s3Key": "amplify-builds/S3Triggerea54043a-3333753148775438762f-build.zip"
+        }
+      },
+      "storage": {
+        "enlightengpt": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-enlightengpt-dev-183214-authRole",
