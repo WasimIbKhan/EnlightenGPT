@@ -40,6 +40,7 @@
     "react-bootstrap": "^2.9.2",
     "react-bootstrap-icons": "^1.10.3",
     "react-dom": "18.2.0",
+    "react-loader-spinner": "^6.1.6",
     "react-loading": "^2.0.3",
     "react-markdown": "^8.0.5",
     "react-modal": "^3.16.1",

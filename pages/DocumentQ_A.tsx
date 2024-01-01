@@ -21,7 +21,7 @@ import FeedbackComponent from '@/components/Feedback';
 import DropPlusButton from '../components/drop-plus-button/DropPlusButton';
 import ChatItem from '@/components/ChatItem';
 import Chat from '@/models/Chat';
-
+import Loading from '@/components/ui/loading';
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: RootState) => state.auth.userId);
@@ -71,6 +71,8 @@ export default function Home() {
   });
 
   const { messages, history } = messageState;
+  //console.log('messages', messages);
+  //console.log('history', history);
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -101,7 +103,7 @@ export default function Home() {
         },
       ],
     }));
-    console.log("1. has user submitted files => " ,hasSubmittedFiles)
+    //console.log("1. has user submitted files => " ,hasSubmittedFiles)
     setLoading(true);
     setQuery('');
 
@@ -125,7 +127,7 @@ export default function Home() {
         }),
       });
       const data = await response.json();
-      console.log('data', data);
+      //console.log('data', data);
 
       if (data.error) {
         setError(data.error);
@@ -143,7 +145,7 @@ export default function Home() {
           history: [...state.history, [question, data.text]],
         }));
       }
-      console.log('messageState', messageState);
+      //console.log('messageState', messageState);
       const response1 = await fetch('/api/updateHistory', {
         method: 'POST',
         headers: {
@@ -361,9 +363,7 @@ export default function Home() {
 
   if (pageLoading) {
     return (
-      <div>
-        <h1>Its loading, will make a loading button soon</h1>
-      </div>
+      <Loading />
     );
   }
   return (
@@ -575,17 +575,6 @@ export default function Home() {
                 </div>
               )}</>)}
               <FeedbackComponent />
-              <div className={styles.flexContainer}>
-                <button
-                  className={styles.submitButton}
-                  onClick={handleFileSubmit}
-                >
-                  Upload
-                </button>
-                <button className={styles.submitButton} onClick={handleIngest}>
-                  Ingest
-                </button>
-              </div>
             </main>
           </div>
         </div>

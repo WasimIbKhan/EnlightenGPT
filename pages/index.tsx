@@ -6,6 +6,9 @@ import { RootState } from '@/store/RootState';
 import {checkAuthState} from '@/store/actions/auth'
 import { AppDispatch } from '@/pages/_app';
 import { useDispatch } from 'react-redux';
+
+//import 'bootstrap/dist/css/bootstrap.min.css';
+
 export default function Home() {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();

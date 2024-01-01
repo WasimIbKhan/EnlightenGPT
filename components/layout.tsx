@@ -29,7 +29,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div>
         <div className="py-3">
-                <nav className="ml-4 pl-10 flex items-center space-x-8">
+                <nav className="ml-4 pl-1 flex items-center space-x-8">
                     <div className="inline-flex space-x-8 bg-white px-4 py-2 rounded shadow">
                         <a href="#" className="text-lg font-semibold hover:text-slate-600 cursor-pointer" onClick={() => router.push('/TutorBot')}>
                             TutorBot

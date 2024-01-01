@@ -38,9 +38,9 @@ const docReducer = (state = initialState, action) => {
           emptyChat: false
         }
       case CREATE_EMPTY_CHAT:
+        state.chats.unshift(new Chat("000000000", "Chat With your Docs", [], new Date()));
         return {
-          ...state,
-          emptyChat: true
+          ...state
         }
       default:
         return state;
