@@ -11,11 +11,9 @@ interface DropFileInputProps {
     serverFiles:[],
     currentFiles:File[]|null
 }
-
 const DropFileInput: React.FC<DropFileInputProps> = (props) => {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
-    //console.log("current files:",props.currentFiles);
-    const [fileList, setFileList] = useState<File[]|null>(props.currentFiles);
+    const [fileList, setFileList] = useState<File[]>(props.currentFiles || []);
 
     const onDragEnter = () => {
         if (wrapperRef.current) {
@@ -36,22 +34,18 @@ const DropFileInput: React.FC<DropFileInputProps> = (props) => {
     };
 
     const onFileDrop = (e: ChangeEvent<HTMLInputElement>) => {
-        const newFile = e.target.files && e.target.files[0];
-        if (newFile) {
-            const updatedList = [...fileList, newFile];
+        const newFiles = e.target.files;
+        if (newFiles) {
+            const updatedList = [...fileList, ...Array.from(newFiles)];
             setFileList(updatedList);
             props.onFileChange(updatedList);
         }
     };
 
     const fileRemove = (file: File) => {
-        const updatedList = [...fileList];
-        const index = updatedList.indexOf(file);
-        if (index !== -1) {
-            updatedList.splice(index, 1);
-            setFileList(updatedList);
-            props.onFileChange(updatedList);
-        }
+        const updatedList = fileList.filter(f => f !== file);
+        setFileList(updatedList);
+        props.onFileChange(updatedList);
     };
 
     return (
