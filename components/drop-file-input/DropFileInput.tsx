@@ -50,7 +50,7 @@ const DropFileInput: React.FC<DropFileInputProps> = (props) => {
 
     return (
         <>
-            {props.currentFiles.length > 0 ? (
+            {props.currentFiles && props.currentFiles.length > 0 ? (
                 <div className={styles.dropFilePreview}>
                     {props.currentFiles.map((item, index) => (
                         <div key={index} className={styles.dropFilePreview_item}>
