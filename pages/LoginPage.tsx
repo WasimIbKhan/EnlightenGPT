@@ -149,7 +149,7 @@ function Login() {
                         Hello, stranger!
                     </span>
                     <span className={styles['login__welcome-back__main-container__text-container--secondary']}>
-                        Enter your personal details and start your own portfolio!
+                        Welcome to EnlightenGPT where you we will assisst you in your prusuit of knowledge
                     </span>
                 </div>
                 <div onClick={() => {
