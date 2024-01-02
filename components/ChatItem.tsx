@@ -18,8 +18,7 @@ const ChatHistoryClass = {
 };
 
 const ChatHistory = React.memo(
-        
-    ({ title, handleSwitchChat, chatIndex }: { title: string; handleSwitchChat:Function, chatIndex: number }) => {
+    ({ title, handleSwitchChat, chatIndex }: { title: string; handleSwitchChat: Function, chatIndex: number }) => {
         const [isDelete, setIsDelete] = useState<boolean>(false);
         const [isEdit, setIsEdit] = useState<boolean>(false);
         const [_title, _setTitle] = useState<string>(title);
@@ -141,5 +140,7 @@ const ChatHistory = React.memo(
         );
     }
 );
+
+ChatHistory.displayName = 'ChatHistory'; 
 
 export default ChatHistory;
