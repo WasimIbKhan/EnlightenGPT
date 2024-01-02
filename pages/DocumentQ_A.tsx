@@ -387,9 +387,11 @@ export default function Home() {
                   {chats &&
                     chats.map((chat, index) => (
                       <ChatItem
+                        key={chat.chat_id || index}  
                         title={chat.chatTitle}
                         handleSwitchChat={handleSwitchChat}
-                        chatIndex={index} />
+                        chatIndex={index}
+                  />
                     ))}
                 </ul>
               )}
