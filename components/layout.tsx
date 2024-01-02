@@ -9,7 +9,7 @@ interface LayoutProps {
   children?: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+const Layout = ({ children }: LayoutProps) => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>()
@@ -54,3 +54,6 @@ export default function Layout({ children }: LayoutProps) {
     </div>
 );
 }
+Layout.displayName = 'Layout';
+
+export default Layout;

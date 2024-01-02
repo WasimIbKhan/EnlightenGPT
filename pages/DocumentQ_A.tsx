@@ -45,8 +45,7 @@ export default function Home() {
     } catch (err: any) {
       console.log(err.message);
     }
-    return;
-  }, [dispatch, setLoading]);
+  }, [dispatch]); 
 
   useEffect(() => {
     setLoading(true);
