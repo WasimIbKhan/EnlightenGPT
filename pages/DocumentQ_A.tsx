@@ -12,7 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { addChat, getChats, switchChat } from '../store/actions/chat';
+import { addChat, getChats, switchChat, createEmptyChat } from '../store/actions/chat';
 import DropFileInput from '../components/drop-file-input/DropFileInput';
 import { AppDispatch } from '@/pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +27,7 @@ export default function Home() {
   const userId = useSelector((state: RootState) => state.auth.userId);
   const chats = useSelector((state: RootState) => state.chats.chats);
   const index = useSelector((state: RootState) => state.chats.index);
-
+  const emptyChat = useSelector((state: RootState) => state.chats.emptyChat);
   const [chatId, setChatId] = useState('000000000');
   const [chatTitle, setTitle] = useState('');
   const [files, setFiles] = useState<File[] | null>([]); // Use File[] or null
@@ -52,7 +52,7 @@ export default function Home() {
     loadChats().then(() => {
       setLoading(false);
     });
-  }, [dispatch, loadChats]);
+  }, [dispatch, loadChats, emptyChat]);
 
   const [messageState, setMessageState] = useState<{
     messages: Message[];
@@ -360,6 +360,10 @@ export default function Home() {
     
   };
 
+  const handleNewChatFunc = async () => {
+    console.log('new chat')
+    dispatch(createEmptyChat());
+  }
   if (pageLoading) {
     return (
       <Loading />
@@ -376,14 +380,6 @@ export default function Home() {
             <div className={styles.sidebar}>
               {chats && (
                 <ul className={styles.chatList}>
-                  <button
-                    className={styles.newChatButton}
-                    onClick={() => {
-                      handleSwitchChat(0);
-                    }}
-                  >
-                    New Chat
-                  </button>
                   {chats &&
                     chats.map((chat, index) => (
                       <ChatItem

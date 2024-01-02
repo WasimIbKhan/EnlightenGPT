@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-
+import styles from './chatItem.module.css';
 import ChatIcon from '../assets/icon/ChatIcon';
 import CrossIcon from '../assets/icon/CrossIcon';
 import DeleteIcon from '../assets/icon/DeleteIcon';
@@ -23,7 +23,7 @@ const ChatHistory = React.memo(
         const [isEdit, setIsEdit] = useState<boolean>(false);
         const [_title, _setTitle] = useState<string>(title);
         const inputRef = useRef<HTMLInputElement>(null);
-
+        console.log("Chat Index: ", chatIndex, "title: ", title)
         const editTitle = () => {
             //setChats(updatedChats);
             setIsEdit(false);
@@ -60,7 +60,20 @@ const ChatHistory = React.memo(
         useEffect(() => {
             if (inputRef && inputRef.current) inputRef.current.focus();
         }, [isEdit]);
- 
+        
+        if(chatIndex == 0) {
+            return(
+                <button
+                    className={styles.newChatButton}
+                    onClick={() => {
+                        console.log("Chat Index: ", chatIndex);
+                        handleSwitchChat(chatIndex);
+                    }}
+                  >
+                    New Chat
+                  </button>
+            )
+        }
         return (
             <a
                 className={`${

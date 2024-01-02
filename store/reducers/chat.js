@@ -9,38 +9,32 @@ const initialState = {
 const docReducer = (state = initialState, action) => {
     switch (action.type) {
       case GET_CHATS:
+        console.log("empty chat 3", state.emptyChat)
         let chats = action.chats || [];
-        if(state.emptyChat) {
-          chats.unshift(new Chat("000000000", "Chat With your Docs", [], new Date()));
-        }
+        chats.unshift(new Chat("000000000", "Chat With your Docs", [], new Date()));
         return {
           ...state,
-          chats: chats
+          chats: chats,
         };
       case ADD_CHAT:
         const chat = new Chat(
-            action.chat_id,
-            action.chatTitle,
-            action.docs,
-            action.createdAt
-        )
-        console.log(chat)
-        return {
-          ...state,
-          chats: [chat, ...state.chats],
-          index: 0,
-          emptyChat: false
-        };
+          action.chat_id,
+          action.chatTitle,
+          action.docs,
+          action.createdAt
+      )
+      return {
+        ...state,
+          chats: state.chats.concat(chat)
+      };
       case SWITCH_CHAT:
         return {
           ...state,
-          index: action.index,
-          emptyChat: false
+          index: action.index
         }
       case CREATE_EMPTY_CHAT:
-        state.chats.unshift(new Chat("000000000", "Chat With your Docs", [], new Date()));
         return {
-          ...state
+          emptyChat: true
         }
       default:
         return state;

@@ -8,6 +8,6 @@ export interface RootState {
   chats: {
     chats: Chat[]; // Use the Chat type here
     index: number;
+    emptyChat: boolean;
   }
-  // ... other slices of state
 }
