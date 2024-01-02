@@ -176,26 +176,6 @@ export default function Home() {
               </div>
             )}
           </main>
-            <div className={styles.box}>
-              <input
-                placeholder="Chat Title"
-                className={styles.chatTitleInput}
-                value={chatTitle}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <DropFileInput
-                onFileChange={onFileChange}
-                serverFiles={serverFiles}
-              />
-              <div className={styles.flexContainer}>
-                <button
-                  className={styles.submitButton}
-                  onClick={handleFileSubmit}
-                >
-                  Upload
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </Layout>
