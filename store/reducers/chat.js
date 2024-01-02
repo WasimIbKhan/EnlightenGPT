@@ -9,12 +9,22 @@ const initialState = {
 const docReducer = (state = initialState, action) => {
     switch (action.type) {
       case GET_CHATS:
-        console.log("empty chat 3", state.emptyChat)
+        console.log("empty chat 3", state.emptyChat);
         let chats = action.chats || [];
         chats.unshift(new Chat("000000000", "Chat With your Docs", [], new Date()));
+
+        // Sort chats by createdAt date, from latest to earliest
+        chats.sort((a, b) => {
+            // Parse dates if they are not already Date objects
+            let dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
+            let dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
+
+            return dateB - dateA;  // Reverse the order by swapping dateA and dateB
+        });
+
         return {
-          ...state,
-          chats: chats,
+            ...state,
+            chats: chats,
         };
       case ADD_CHAT:
         const chat = new Chat(

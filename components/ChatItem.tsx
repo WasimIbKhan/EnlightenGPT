@@ -23,7 +23,6 @@ const ChatHistory = React.memo(
         const [isEdit, setIsEdit] = useState<boolean>(false);
         const [_title, _setTitle] = useState<string>(title);
         const inputRef = useRef<HTMLInputElement>(null);
-        console.log("Chat Index: ", chatIndex, "title: ", title)
         const editTitle = () => {
             //setChats(updatedChats);
             setIsEdit(false);

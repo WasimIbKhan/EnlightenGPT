@@ -38,7 +38,7 @@ export default function Home() {
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [agent, setAgent] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-
+  console.log('chats', chats);
   const loadChats = useCallback(async () => {
     try {
       await dispatch(getChats());
@@ -394,7 +394,7 @@ export default function Home() {
             </div>
 
             <main className={styles.main}>
-              {chatTitle.length!==0 && (<><div className={styles.cloud}>
+              {(<><div className={styles.cloud}>
                 <div ref={messageListRef} className={styles.messagelist}>
                   {messageState.history.map((messagePair, index) => (
                     <>
