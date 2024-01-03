@@ -89,7 +89,20 @@ export default function Home() {
       alert('Please input a question');
       return;
     }
-    
+
+    let chat;
+    if(serverFiles && serverFiles.length==0){
+      if (query.length > 0 && files && files.length > 0) {
+        chat = await handleFileSubmit()
+      } else {
+        alert('Please upload a file');
+        return
+      }
+      
+    } else {
+      chat = chats[index];
+    }
+
     const question = query.trim();
     
     setMessageState((state) => ({
@@ -106,13 +119,6 @@ export default function Home() {
     setLoading(true);
     setQuery('');
 
-    let chat;
-    if(serverFiles && serverFiles.length==0){
-      chat = await handleFileSubmit()
-    } else {
-      chat = chats[index];
-    }
-    
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -308,7 +314,6 @@ export default function Home() {
   };
 
   const handleFileSubmit = async () => {
-  if (query.length > 0 && files && files.length > 0) {
     setPageLoading(true);
     const newChatData = await dispatch(addChat(query.trim(), files));
     if(newChatData) {
@@ -317,11 +322,6 @@ export default function Home() {
       setServerFiles(newChatData.docs)
     }
     setPageLoading(false);
-    return newChatData
-  } else {
-    alert('Please make sure a Chat Title and files are set');
-    return;
-  }
 };
 
   const handleIngest = async (chat: Chat) => {

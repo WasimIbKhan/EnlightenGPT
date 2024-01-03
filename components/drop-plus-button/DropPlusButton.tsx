@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useRef } from 'react';
 import styles from './DropPlusButton.module.css';
-import { PlusCircle } from 'react-bootstrap-icons';
+import { PlusCircleFill } from 'react-bootstrap-icons';
 
 interface DropPlusButtonProps {
     onFileChange: (files: File[]) => void;
@@ -26,7 +26,7 @@ const DropPlusButton: React.FC<DropPlusButtonProps> = (props) => {
 
     return (
         <div className="plus_button_wrapper" onMouseEnter={handleIconClick}>
-            <PlusCircle className={styles.plus_button} />
+            <PlusCircleFill className={styles.plus_button} />
             <input
                 type="file"
                 ref={fileInputRef}

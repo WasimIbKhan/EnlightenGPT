@@ -6,6 +6,7 @@
   padding: 1rem;
   border: 1px solid #d9d9e3;
   border-radius: 0.5rem;
+  margin-left: 160px
 }
 
 .header {
@@ -346,9 +347,10 @@
 
 /* styles/ChatSidebar.module.css */
 .sidebar {
-  width: 25%;
+  position: fixed;
+  left: 20px;
+  width: 300px;
   background-color: white;
-  height: 100vh;
   box-sizing: border-box;
   overflow-y: auto;
 }

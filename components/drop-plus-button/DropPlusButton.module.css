@@ -8,6 +8,7 @@
     transform: translate(50%, 50%);
     width: 30px;
     height: 30px;
+    color: #3886FD;
   }
 
   .plus_button:hover {
