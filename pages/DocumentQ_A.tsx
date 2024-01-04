@@ -372,7 +372,7 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <div className="mx-auto flex flex-col gap-4">
+        <div className="mx-auto">
           <h1 className="text-2xl font-bold leading-[1.1] tracking-tighter text-center">
             {chatTitle}
           </h1>
