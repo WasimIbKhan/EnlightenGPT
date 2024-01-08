@@ -4,6 +4,8 @@ import styles from '@/styles/Home.module.css';
 import { Message } from '@/types/chat';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 import LoadingDots from '@/components/ui/LoadingDots';
 import { Document } from 'langchain/document';
 import {
@@ -12,11 +14,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import DropFileInput from '../components/drop-file-input/DropFileInput';
+import UploadFileDropbox from '../components/upload-file-dropbox/uploadFileDropbox';
 import { AppDispatch } from '@/pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/RootState';
 import { uploadTempFilesToAmplifyStorage } from '../store/actions/chat';
+
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -59,27 +62,23 @@ export default function Home() {
     try {
       const response = await fetch('/api/summeriseDoc', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({fileLocations: fileLocations}),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileLocations: fileLocations }),
       });
-      const data = await response.json();
-      console.log('data', data);
-
-      if (data.error) {
-        setError(data.error);
-      } else {
+  
+      const reader = response.body.getReader();
+      let receivedText = '';
+  
+      while (true) {
+        const { value: chunk, done } = await reader.read();
+        if (done) break;
+        const textChunk = new TextDecoder("utf-8").decode(chunk);
+        receivedText += textChunk;
+        
+        // Update state with each chunk
         setMessageState((state) => ({
           ...state,
-          messages: [
-            ...state.messages,
-            {
-              type: 'apiMessage',
-              message: data.text
-            },
-          ],
-          history: [...state.history, [data.text]],
+          messages: [{ type: 'apiMessage', message: receivedText }],
         }));
       }
       console.log('messageState', messageState);
@@ -160,7 +159,7 @@ export default function Home() {
                       <div key={`chatMessage-${index}`} className={className}>
                         {icon}
                         <div className={styles.markdownanswer}>
-                          <ReactMarkdown linkTarget="_blank">
+                          <ReactMarkdown  remarkPlugins={[gfm]} linkTarget="_blank">
                             {message.message}
                           </ReactMarkdown>
                         </div>
@@ -176,6 +175,26 @@ export default function Home() {
               </div>
             )}
           </main>
+            <div className={styles.box}>
+              <input
+                placeholder="Chat Title"
+                className={styles.chatTitleInput}
+                value={chatTitle}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <UploadFileDropbox
+                onFileChange={onFileChange}
+                serverFiles={serverFiles}
+              />
+              <div className={styles.flexContainer}>
+                <button
+                  className={styles.submitButton}
+                  onClick={handleFileSubmit}
+                >
+                  Upload
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </Layout>

@@ -6,6 +6,7 @@ import { loadSummarizationChain } from "langchain/chains";
 import { TextSplitter } from "langchain/text_splitter";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ChatAnthropic } from "langchain/chat_models/anthropic";
+import { PromptTemplate } from 'langchain';
 
 export default async function handler(
     req: NextApiRequest,
@@ -25,7 +26,8 @@ export default async function handler(
 
     const model = new ChatOpenAI({
         temperature: 0, // increase temepreature to get more creative answers
-        modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+        modelName: 'gpt-3.5-turbo', 
+        streaming: true,
       });
 
     const textSplitter = new RecursiveCharacterTextSplitter({
@@ -34,9 +36,7 @@ export default async function handler(
     });
 
     const docs = await textSplitter.splitDocuments(rawDocs);
-    console.log('docs', docs);
     
-
     //only accept post requests
     if (req.method !== 'POST') {
         res.status(405).json({ error: 'Method not allowed' });
@@ -47,14 +47,41 @@ export default async function handler(
         return res.status(400).json({ message: 'No docs in the request' });
     }
 
+    const map_prompt = `
+        Write a concise summary of the following:
+        {text}
+        CONCISE SUMMARY:
+        `
+        const mapPromptTemplate = new PromptTemplate({template: map_prompt, inputVariables: ['text']});
+
+    const combinePrompt = `Write a concise summary of the following text delimited by triple backquotes.
+        Return your response in bullet points which covers the key points of the text.
+        {text}
+        BULLET POINT SUMMARY:`
+    const combinePromptTemplate = new PromptTemplate({template: combinePrompt, inputVariables: ['text']});
+    let shouldStream = false;
     try {
         //create chain
-        const chain = loadSummarizationChain(model, { type: "map_reduce" });
+        let finalToken = "";
+        const chain = loadSummarizationChain(model, { type: "map_reduce", combineMapPrompt: mapPromptTemplate, combinePrompt: combinePromptTemplate});
         const response = await chain.call({
             input_documents: docs,
-        });
-
-        console.log('response', response);
+        }, {
+            callbacks: [
+              {
+                handleLLMNewToken(token: string) {
+                    if(token === "-") {
+                        shouldStream = true;
+                    }
+                    if(shouldStream) {
+                        res.write(token);
+                    }
+                    
+                },
+              },
+            ],
+          });
+        console.log('finalToken', finalToken);
         res.status(200).json(response);
     } catch (error: any) {
         console.log('error', error);
