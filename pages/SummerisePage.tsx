@@ -66,7 +66,7 @@ export default function Home() {
         body: JSON.stringify({ fileLocations: fileLocations }),
       });
   
-      const reader = response.body.getReader();
+      const reader: any = response.body?.getReader();
       let receivedText = '';
   
       while (true) {
