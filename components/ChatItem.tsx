@@ -65,7 +65,6 @@ const ChatHistory = React.memo(
                 <button
                     className={styles.newChatButton}
                     onClick={() => {
-                        console.log("Chat Index: ", chatIndex);
                         handleSwitchChat(chatIndex);
                     }}
                   >
@@ -81,7 +80,6 @@ const ChatHistory = React.memo(
                     'cursor-pointer opacity-100'
                 }`}
                 onClick={() => {
-                        console.log("Chat Index: ", chatIndex);
                         handleSwitchChat(chatIndex);
                     //if (!generating) setCurrentChatIndex(chatIndex);
                 }}

@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import styles from '@/styles/dropdown.module.css';
 
 interface DropdownProps {
-    onAgentChange: (option: string) => void;
+    onOptionChange: (option: string) => void;
+    options: String[]
 }
-const Dropdown: React.FC<DropdownProps> = ({onAgentChange}) => {
+const Dropdown: React.FC<DropdownProps> = ({onOptionChange, options}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState('Select a Q/A Agent');
-    const options = ['Quick search', 'Research'];
-
+    const [selectedOption, setSelectedOption] = useState(options[0]);
+    
     const toggleDropdown = () => setIsOpen(!isOpen);
 
     const handleSelect = (option: string) => {
         setSelectedOption(option);
-        onAgentChange(option);
+        onOptionChange(option);
         setIsOpen(false);
     };
 

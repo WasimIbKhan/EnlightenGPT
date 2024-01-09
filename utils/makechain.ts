@@ -5,6 +5,9 @@ import { LLMChain } from "langchain/chains";
 import { PromptTemplate, ChatMessagePromptTemplate } from "langchain/prompts";
 import { ConversationChain } from "langchain/chains";
 import { BufferMemory, ChatMessageHistory  } from "langchain/memory";
+import { OpenAIAssistantRunnable } from "langchain/experimental/openai_assistant";
+import {TUTOR_PROMPT} from '../prompts'
+
 const CONDENSE_TEMPLATE = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
 
 Chat History:
@@ -42,24 +45,27 @@ export const makeChain = (vectorstore: PineconeStore) => {
   return chain;
 };
 
-export const chatChain = async(question: string, pastMessages:any) => {
-  const llm = new ChatOpenAI({
-    temperature: 0, // increase temepreature to get more creative answers
-    modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+export const chatChain = async(question: string, pastMessages:any, currentAssisstanceId: string, currentRunId:string, currentThreadId: string) => {
+  let assistant;
+  if(currentAssisstanceId) {
+      assistant = new OpenAIAssistantRunnable({
+        assistantId: currentAssisstanceId,
+        // Additional configuration if necessary
+      });
+  } else {
+      assistant = await OpenAIAssistantRunnable.createAssistant({
+        model: "gpt-3.5-turbo-1106",
+        instructions: "You are a helpful assistant that provides answers to math problems.",
+        name: "Math Assistant",
+        tools: [{ type: "code_interpreter" }],
+      });
+  }
+
+  const response = await assistant.invoke({
+      content: question,
   });
-  console.log('pastMessages', pastMessages)
-  const memory = new BufferMemory({
-    chatHistory: new ChatMessageHistory(pastMessages),
-  });
-  
-  const chain = new ConversationChain({
-    memory: memory,
-    llm: llm,
-    verbose: true,
-  });
-  const response = await chain.call({
-    input: question
-  });
-  
+  response[0].content.map(content => {
+    console.log(content.text)
+  })
   return response;
 };

@@ -83,7 +83,6 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tutor: tutor,
           question,
           history,
           files: files
@@ -151,7 +150,7 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tutor: tutor,
+          tutor,
           question,
           history,
           files: files,
